@@ -2,7 +2,15 @@
 
 A professional React + TypeScript web application for calculating order prices with real-time discount management. Built with Vite, featuring a clean UI with advanced discount logic and comprehensive test coverage.
 
-## 📋 Features
+## � Live Demo
+
+**[https://order-product-calculator.vercel.app/](https://order-product-calculator.vercel.app/)**
+
+Try the calculator live! Add items to cart, toggle member status, and see real-time discount calculations.
+
+---
+
+## �📋 Features
 
 ### Core Functionality
 - ✅ **Dynamic Price Calculation** - Real-time total updates as items are added/removed
@@ -215,72 +223,19 @@ Scenario 4: Orange (qty 2) + Member
 - **ESLint** - Code linting
 - **TypeScript Compiler** - Static type checking
 
-## 📊 Build Information
-
-```
-vite v4.5.14 building for production...
-✓ 51 modules transformed.
-dist/index.html                   0.47 kB │ gzip:  0.30 kB
-dist/assets/index-*.css           9.65 kB │ gzip:  2.65 kB
-dist/assets/index-*.js          232.53 kB │ gzip: 69.42 kB
-✓ built in 978ms
-```
-
 ## 🎨 Design System
 
 ### Visual Hierarchy
-- Cards lift 6px on hover with graduated shadows
-- Price (1.8em) > Item name (1.1em) > Details (0.9em)
-- Discount badges with pulse animation
-- Total price animates on change (1.8em)
+- Cards lift on hover with graduated shadows
+- Price emphasis - Item name - Details
+- Discount badges with visual indicators
+- Total price with real-time updates
 
 ### Interactions
-- Button scale effects (1.1x on hover, 0.98x on click)
-- Smooth transitions (0.2s - 0.4s)
-- Glow shadows on hover (rgba with transparency)
-- Real-time live calculations
-
-### Responsive Breakpoints
-- **Desktop**: Full 3:1 grid (menu : cart)
-- **Tablet** (1024px): Stack vertically
-- **Mobile** (768px): Single column with adjusted spacing
-
-## 🔧 Configuration Files
-
-### vite.config.ts
-```typescript
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 3000,
-    open: true
-  }
-})
-```
-
-### tsconfig.json
-- Target: ES2020
-- JSX: react-jsx
-- Strict mode enabled
-- Module resolution: bundler
-
-### jest.config.cjs
-- Test environment: jsdom
-- Use ts-jest for TypeScript
-- Watch tests during development
-
-## 📝 Git Structure
-
-```
-Commits suggest:
-- Initial Vite + React + TypeScript setup
-- Service layer implementation (PriceCalculator, DiscountService)
-- Custom hooks for state management
-- UI components with professional styling
-- Comprehensive test suite
-- Color theme and layout updates
-- UX improvements and animations
-```
+- Button hover effects with smooth feedback
+- Smooth transitions for all state changes
+- Glow shadows on interactive elements
+- Real-time live calculations on input changes
 
 ## 🚢 Deployment
 
@@ -317,21 +272,3 @@ The `dist/` folder is production-ready and can be deployed to:
 - `src/components/OrderCalculator.tsx` - Main component orchestration
 - `tests/services/PriceCalculator.test.ts` - Test examples
 
-## 🐛 Troubleshooting
-
-### Port Already in Use
-```bash
-npm run dev -- --port 3002
-```
-
-### Tests Not Running
-```bash
-npm test -- --no-cache
-```
-
-### Build Errors
-```bash
-rm -rf node_modules package-lock.json
-npm install
-npm run build
-```
