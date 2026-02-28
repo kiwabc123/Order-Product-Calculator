@@ -2,7 +2,7 @@
 
 A professional React + TypeScript web application for calculating order prices with real-time discount management. Built with Vite, featuring a clean UI with advanced discount logic and comprehensive test coverage.
 
-## � Live Demo
+## 🚀 Live Demo
 
 **[https://order-product-calculator.vercel.app/](https://order-product-calculator.vercel.app/)**
 
@@ -10,7 +10,7 @@ Try the calculator live! Add items to cart, toggle member status, and see real-t
 
 ---
 
-## �📋 Features
+## 📋 Features
 
 ### Core Functionality
 - ✅ **Dynamic Price Calculation** - Real-time total updates as items are added/removed
