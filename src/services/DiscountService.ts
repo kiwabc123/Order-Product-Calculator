@@ -14,7 +14,7 @@ export class DiscountService {
       MenuItem.Green
     ];
 
-    if (eligibleItems.includes(item) && quantity % 2 === 0) {
+    if (eligibleItems.includes(item) && quantity >= 2) {
       return subtotal * 0.95;
     }
 

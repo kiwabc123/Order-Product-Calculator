@@ -4,7 +4,7 @@ import { MenuItem } from "../../src/models/MenuItem";
 describe("DiscountService", () => {
 
   describe("applyItemDiscount", () => {
-    it("should apply 5% discount for eligible items with even quantity", () => {
+    it("should apply 5% discount for eligible items with quantity 2 or more", () => {
       const result = DiscountService.applyItemDiscount(
         MenuItem.Orange,
         2,
@@ -22,16 +22,16 @@ describe("DiscountService", () => {
       expect(result).toBe(100);
     });
 
-    it("should not apply discount for odd quantities", () => {
+    it("should not apply discount for quantities less than 2", () => {
       const result = DiscountService.applyItemDiscount(
         MenuItem.Orange,
-        3,
+        1,
         100
       );
       expect(result).toBe(100);
     });
 
-    it("should apply discount for Pink with even quantity", () => {
+    it("should apply discount for Pink with quantity 2 or more", () => {
       const result = DiscountService.applyItemDiscount(
         MenuItem.Pink,
         4,
@@ -40,7 +40,7 @@ describe("DiscountService", () => {
       expect(result).toBe(190);
     });
 
-    it("should apply discount for Green with even quantity", () => {
+    it("should apply discount for Green with quantity 2 or more", () => {
       const result = DiscountService.applyItemDiscount(
         MenuItem.Green,
         2,
@@ -63,7 +63,7 @@ describe("DiscountService", () => {
   });
 
   describe("getItemDiscountPercentage", () => {
-    it("should return 5% for eligible items with even quantity", () => {
+    it("should return 5% for eligible items with quantity 2 or more", () => {
       const result = DiscountService.getItemDiscountPercentage(
         MenuItem.Orange,
         2
@@ -79,10 +79,10 @@ describe("DiscountService", () => {
       expect(result).toBe(0);
     });
 
-    it("should return 0% for odd quantities", () => {
+    it("should return 0% for quantities less than 2", () => {
       const result = DiscountService.getItemDiscountPercentage(
         MenuItem.Pink,
-        3
+        1
       );
       expect(result).toBe(0);
     });

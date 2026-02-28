@@ -126,9 +126,9 @@ orderProduct/
    - ✅ Apply 10% member discount = $81
 
 2. **Item Discount (5%)**
-   - ✅ Orange sets with even quantity (2, 4, 6...)
-   - ✅ Pink sets with even quantity
-   - ✅ Green sets with even quantity
+   - ✅ Orange sets with quantity 2 or more (2, 3, 4, 5...)
+   - ✅ Pink sets with quantity 2 or more
+   - ✅ Green sets with quantity 2 or more
 
 3. **Member Discount (10%)**
    - ✅ Applied to total after item discounts
@@ -176,7 +176,7 @@ Tests:       24 passed, 24 total
 | Orange  | $120  |
 
 ### Discount Rules
-1. **Item Discount**: 5% off for Orange, Pink, Green when quantity is **EVEN**
+1. **Item Discount**: 5% off for Orange, Pink, Green when quantity is **2 or more items**
 2. **Member Discount**: 10% off total (applies after item discounts)
 3. **Combined**: Both discounts can apply to same order
 
