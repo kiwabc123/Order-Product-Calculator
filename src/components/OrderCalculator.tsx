@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { usePriceCalculation, useOrderManagement } from '../hooks';
+import { N8nService } from '../services';
 import MenuItemSelector from './MenuItemSelector';
 import OrderSummary from './OrderSummary';
 import PriceDisplay from './PriceDisplay';
@@ -66,7 +67,26 @@ export default function OrderCalculator() {
           text: `Your order of $${priceBreakdown.total.toLocaleString('en-US', { minimumFractionDigits: 2 })} has been successfully placed.`,
           icon: 'success',
           confirmButtonColor: '#B35656',
-        }).then(() => {
+        }).then(async () => {
+          // Send order analytics to n8n
+          const orderSummary = order
+            .map(item => `${item.item} (×${item.quantity})`)
+            .join(', ');
+          
+          const result = await N8nService.sendOrderAnalytics({
+            name: orderSummary,
+            price: priceBreakdown.total,
+            quantity: order.length,
+            discount: priceBreakdown.itemDiscount + priceBreakdown.memberDiscount,
+            total: priceBreakdown.total,
+          });
+
+          if (result.success) {
+            console.log('Order analytics sent to n8n:', result.data);
+          } else {
+            console.warn('Failed to send order analytics:', result.error);
+          }
+
           clearOrder();
         });
       }
