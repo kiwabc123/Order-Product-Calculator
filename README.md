@@ -20,6 +20,12 @@ Try the calculator live! Add items to cart, toggle member status, and see real-t
 - ✅ **Order Confirmation** - SweetAlert2 modals with detailed breakdown
 - ✅ **Clear Cart Confirmation** - Prevent accidental cart clearing
 
+### Analytics & Integration
+- 📊 **Analytics Dashboard** - View order history and statistics
+- 🔗 **n8n Integration** - Automated order tracking via webhooks
+- 📋 **Google Sheets Logging** - Orders automatically logged to spreadsheet
+- 🐳 **Docker Support** - One-command n8n setup with auto workflow import
+
 ### UI/UX Enhancements
 - 🎨 **Professional Design** - Custom color theme (Dark mode with accent colors)
 - 🎯 **Visual Hierarchy** - Card hover effects, elevation, and smooth animations
@@ -271,4 +277,41 @@ The `dist/` folder is production-ready and can be deployed to:
 - `src/hooks/usePriceCalculation.ts` - Price state management
 - `src/components/OrderCalculator.tsx` - Main component orchestration
 - `tests/services/PriceCalculator.test.ts` - Test examples
+
+## 🔗 N8n Integration
+
+### Prerequisites
+- Docker Desktop installed and running
+
+### Quick Start
+
+```bash
+# Start n8n container
+docker-compose up -d
+
+# Import and activate workflows
+.\scripts\init-n8n-workflow.bat
+```
+
+### Workflows
+
+| Workflow | Endpoint | Description |
+|----------|----------|-------------|
+| Order Analytics | `POST /webhook/order-analytics` | Receives order data, logs to Google Sheets |
+| Get Orders API | `GET /webhook/orders` | Returns order history from Google Sheets |
+
+### Environment Variables
+
+Create a `.env` file:
+```env
+REACT_APP_N8N_URL=http://localhost:5678
+```
+
+### Manual Workflow Setup
+
+If auto-import fails:
+1. Open [http://localhost:5678](http://localhost:5678)
+2. Import workflows from `n8n/` folder
+3. Configure Google Sheets credentials
+4. Activate both workflows
 

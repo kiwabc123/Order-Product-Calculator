@@ -18,7 +18,7 @@ export interface OrderAnalyticsPayload {
   timestamp?: string;
 }
 
-const N8N_BASE_URL = process.env.REACT_APP_N8N_URL || 'http://localhost:5678';
+const N8N_BASE_URL = import.meta.env.REACT_APP_N8N_URL || 'http://localhost:5678';
 
 class N8nService {
   /**
