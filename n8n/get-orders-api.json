@@ -6,7 +6,10 @@
       "parameters": {
         "httpMethod": "GET",
         "path": "orders",
-        "options": {}
+        "options": {
+          "responseCode": 200,
+          "responseMode": "onReceived"
+        }
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -44,18 +47,111 @@
           "id": "ezEXqJolgSXJtJJ9",
           "name": "Google Sheets account"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { success: true, data: $input.all(), timestamp: $now.toISOString() } }}"
+        "responseBody": "={{ { success: true, data: $input.all(), timestamp: $now.toISOString(), count: $input.all().length } }}"
       },
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [600, 0],
       "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
       "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: false, error: 'Failed to read data from Google Sheets', message: $json.error?.message || 'Unknown error occurred', timestamp: $now.toISOString() } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [600, 200],
+      "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+      "name": "Error Response"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [450, 0],
+      "id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
+      "name": "Has Data?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, data: [], message: 'No orders found', timestamp: $now.toISOString(), count: 0 } }}"
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [600, 100],
+      "id": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d",
+      "name": "Empty Response"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [-200, 200],
+      "id": "b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "errorType",
+              "value": "={{ $json.error?.name || 'WorkflowError' }}"
+            },
+            {
+              "name": "errorMessage",
+              "value": "={{ $json.error?.message || 'An unexpected error occurred in the workflow' }}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $now.toISOString() }}"
+            },
+            {
+              "name": "workflowName",
+              "value": "Get Orders API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [0, 200],
+      "id": "c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f",
+      "name": "Set Error Details"
     }
   ],
   "pinData": {},
@@ -75,7 +171,43 @@
       "main": [
         [
           {
+            "node": "Has Data?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Data?": {
+      "main": [
+        [
+          {
             "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Empty Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Error Details",
             "type": "main",
             "index": 0
           }
@@ -85,7 +217,8 @@
   },
   "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "errorWorkflow": "get-orders-api-001"
   },
   "meta": {
     "templateCredsSetupCompleted": true

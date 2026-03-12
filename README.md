@@ -213,21 +213,29 @@ Scenario 4: Orange (qty 2) + Member
 
 ### Frontend
 - **React 18.2.0** - UI library
-- **TypeScript 5.3** - Type safety
-- **Vite 4.5** - Fast build tool & dev server
+- **TypeScript 5.3.3** - Type safety
+- **Vite 4.5.0** - Fast build tool & dev server
 
 ### Testing
-- **Jest 29.7** - Test framework
-- **ts-jest 29.1** - TypeScript support for Jest
-- **React Testing Library 14.1** - Component testing
+- **Jest 29.7.0** - Test framework
+- **ts-jest 29.1.1** - TypeScript support for Jest
+- **React Testing Library 14.1.2** - Component testing
+- **@testing-library/jest-dom 6.1.5** - Custom Jest matchers
+- **@testing-library/user-event 13.5.0** - User interaction simulation
 
 ### UI Libraries
-- **SweetAlert2** - Beautiful alert modals
+- **SweetAlert2 11.26.20** - Beautiful alert modals
 - **CSS3** - Animations, gradients, glassmorphism
 
 ### Build & Quality
-- **ESLint** - Code linting
+- **ESLint 8.56.0** - Code linting
+- **@typescript-eslint 6.16.0** - TypeScript ESLint rules
 - **TypeScript Compiler** - Static type checking
+
+### Integration & Automation
+- **n8n** - Workflow automation platform
+- **Docker & Docker Compose** - Container orchestration
+- **Google Sheets API** - Order data storage
 
 ## 🎨 Design System
 
@@ -299,6 +307,53 @@ docker-compose up -d
 |----------|----------|-------------|
 | Order Analytics | `POST /webhook/order-analytics` | Receives order data, logs to Google Sheets |
 | Get Orders API | `GET /webhook/orders` | Returns order history from Google Sheets |
+
+### Get Orders API - Error Handling
+
+The Get Orders API workflow includes comprehensive error handling:
+
+#### Response Formats
+
+**Success Response (200)**
+```json
+{
+  "success": true,
+  "data": [...],
+  "timestamp": "2026-03-12T10:30:00.000Z",
+  "count": 5
+}
+```
+
+**Empty Response (200)**
+```json
+{
+  "success": true,
+  "data": [],
+  "message": "No orders found",
+  "timestamp": "2026-03-12T10:30:00.000Z",
+  "count": 0
+}
+```
+
+**Error Response (500)**
+```json
+{
+  "success": false,
+  "error": "Failed to read data from Google Sheets",
+  "message": "Error details here",
+  "timestamp": "2026-03-12T10:30:00.000Z"
+}
+```
+
+#### Workflow Nodes
+- **Webhook** - GET /orders endpoint
+- **Read Sheet** - Fetches data from Google Sheets (with error output routing)
+- **Has Data?** - Conditional check for empty results
+- **Respond to Webhook** - Success response with data
+- **Empty Response** - Handles no data scenarios
+- **Error Response** - Returns 500 status with error details
+- **Error Trigger** - Catches workflow-level errors
+- **Set Error Details** - Formats error information for logging
 
 ### Environment Variables
 
