@@ -1,0 +1,136 @@
+{
+  "name": "Order AI Analysis - Gemini",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "order-ai-analysis",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "54396a7c-eb35-4a4b-b70e-00f8614e72f6",
+      "name": "Webhook",
+      "webhookId": "4b8c5980-1145-43aa-bcc3-fe2a070cafc1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Greet me warmly and ask what kind of order information I'd like analyzed today."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        0
+      ],
+      "id": "5cfb7e96-344e-48d7-802f-0f84f7afd274",
+      "name": "Gemini AI",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yEhMMJubxfdUVPWB",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n  {\n    \"status\":200,\n    \"text\": $json.greeting\n  }\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        768,
+        0
+      ],
+      "id": "2903ca6d-8e41-49aa-b4a5-16be055870b1",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        608,
+        0
+      ],
+      "id": "cb253e3a-9d55-46e4-823d-3090f78f7945",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Gemini AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini AI": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "196c4c2b-d4cd-40b8-82fc-dc524cbc0623",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cc16db9b8896d62d2a6ea6a511d0ce6e295414257687a64bc7220505a5699fb4"
+  },
+  "id": "order-ai-analysis-gemini-workflow",
+  "tags": []
+}
