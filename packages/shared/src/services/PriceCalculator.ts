@@ -7,6 +7,13 @@ export interface OrderItem {
   quantity: number;
 }
 
+export interface OrderBreakdown {
+  subtotal: number;
+  itemDiscount: number;
+  memberDiscount: number;
+  total: number;
+}
+
 export class PriceCalculator {
 
   calculate(order: OrderItem[], isMember: boolean): number {
@@ -32,12 +39,7 @@ export class PriceCalculator {
     return Number(total.toFixed(2));
   }
 
-  calculateWithBreakdown(order: OrderItem[], isMember: boolean): {
-    subtotal: number;
-    itemDiscount: number;
-    memberDiscount: number;
-    total: number;
-  } {
+  calculateWithBreakdown(order: OrderItem[], isMember: boolean): OrderBreakdown {
     let subtotal = 0;
     let itemDiscount = 0;
 

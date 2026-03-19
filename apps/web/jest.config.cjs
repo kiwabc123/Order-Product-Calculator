@@ -10,5 +10,8 @@ module.exports = {
     '!src/**/*.d.ts',
     '!src/main.tsx',
     '!src/index.tsx'
-  ]
+  ],
+  moduleNameMapper: {
+    '^@order-calculator/shared$': '<rootDir>/../../packages/shared/src/index.ts'
+  }
 }
