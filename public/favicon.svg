@@ -6,5 +6,12 @@
     </linearGradient>
   </defs>
   <rect width="100" height="100" rx="20" fill="url(#grad)"/>
-  <text x="50" y="65" font-size="50" font-family="Arial, sans-serif" font-weight="bold" fill="white" text-anchor="middle">OC</text>
+  <!-- Box body -->
+  <rect x="20" y="35" width="60" height="45" rx="4" fill="white" opacity="0.95"/>
+  <!-- Box lid -->
+  <path d="M15 35 L50 18 L85 35 L50 42 Z" fill="white"/>
+  <!-- Box center line -->
+  <line x1="50" y1="42" x2="50" y2="80" stroke="#B35656" stroke-width="2"/>
+  <!-- Box tape -->
+  <rect x="42" y="18" width="16" height="24" fill="#F6F09F" opacity="0.8"/>
 </svg>
