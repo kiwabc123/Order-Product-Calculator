@@ -15,6 +15,32 @@ services:
     networks:
       - order-product-network
 
+  n8n-init:
+    image: n8nio/n8n:latest
+    container_name: order-product-n8n-init
+    depends_on:
+      - n8n
+    volumes:
+      - ./n8n:/workflows:ro
+    environment:
+      - N8N_HOST=n8n
+      - N8N_PROTOCOL=http
+    networks:
+      - order-product-network
+    command: >
+      sh -c "
+      sleep 15 &&
+      n8n import:workflow --input=/workflows/order-analytics-workflow.json &&
+      n8n import:workflow --input=/workflows/get-orders-api.json &&
+      n8n import:workflow --input=/workflows/order-ai-analysis-gemini-workflow.json &&
+      n8n publish:workflow --id=order-analytics-workflow-001 &&
+      n8n publish:workflow --id=get-orders-api-001 &&
+      n8n publish:workflow --id=order-ai-analysis-gemini-workflow &&
+      echo 'All workflows imported and activated!'
+      "
+    restart: on-failure
+
 networks:
   order-product-network:
     driver: bridge
+
