@@ -1,6 +1,6 @@
 # 🛒 Order Calculator
 
-A professional React + TypeScript web application for calculating order prices with real-time discount management. Built with Vite, featuring a clean UI with advanced discount logic and comprehensive test coverage.
+A professional **monorepo** with React + TypeScript web application and React Native mobile app for calculating order prices with real-time discount management. Built with Vite, Expo, and Turborepo, featuring shared business logic, PWA support, and comprehensive test coverage.
 
 ## 🚀 Live Demo
 
@@ -20,6 +20,12 @@ Try the calculator live! Add items to cart, toggle member status, and see real-t
 - ✅ **Order Confirmation** - SweetAlert2 modals with detailed breakdown
 - ✅ **Clear Cart Confirmation** - Prevent accidental cart clearing
 
+### Multi-Platform
+- 🌐 **Web App** - React + Vite with PWA support
+- 📱 **Mobile App** - React Native with Expo
+- 📦 **Shared Logic** - Common business logic package
+- 🔄 **Monorepo** - pnpm workspaces + Turborepo
+
 ### Analytics & Integration
 - 📊 **Analytics Dashboard** - View order history and statistics
 - 🔗 **n8n Integration** - Automated order tracking via webhooks
@@ -33,6 +39,7 @@ Try the calculator live! Add items to cart, toggle member status, and see real-t
 - ✨ **Real-time Feedback** - Discount badges, price animations, scale effects
 - 🔢 **Formatted Currency** - Localized number formatting ($1,234.56)
 - 🎪 **Glassmorphism Header** - Blur effect and gradient backgrounds
+- 📲 **PWA Support** - Install as app, offline capable
 
 ### Color Theme
 - **Primary**: `#B35656` (Muted Red)
@@ -43,75 +50,90 @@ Try the calculator live! Add items to cart, toggle member status, and see real-t
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 16+ (tested on v16.20.2)
-- npm 8+
+- Node.js 16+ (Node 20+ for mobile development)
+- pnpm 7.33.7+
 
 ### Installation
 
 ```bash
-cd orderProduct
-npm install
+# Install pnpm if not installed
+npm install -g pnpm@7.33.7
+
+# Install all dependencies
+pnpm install
 ```
 
 ### Development
 
 ```bash
-npm run dev
+# Run web app
+pnpm dev:web
+
+# Run mobile app (requires Node 20+)
+pnpm dev:mobile
+
+# Run mobile via Docker (if using Node 16)
+docker-compose up mobile-dev
 ```
 
-Opens at `http://localhost:3001` with hot module replacement (HMR).
+Web opens at `http://localhost:3001` with hot module replacement (HMR).
 
 ### Build for Production
 
 ```bash
-npm run build
-```
+# Build all packages
+pnpm build
 
-Outputs optimized bundle to `dist/` folder.
+# Build web only
+pnpm build:web
+```
 
 ### Run Tests
 
 ```bash
-npm test                 # Run all tests once
-npm run test:watch      # Run tests in watch mode
-npm run test:coverage   # Generate coverage report
+pnpm test:web            # Run web tests once
+pnpm test:web -- --watch # Run tests in watch mode
 ```
 
-## 📦 Project Structure
+## 📦 Project Structure (Monorepo)
 
 ```
 orderProduct/
-├── src/
-│   ├── components/              # React UI components
-│   │   ├── MenuItemSelector.tsx # Item selection cards
-│   │   ├── OrderSummary.tsx     # Cart items display
-│   │   ├── PriceDisplay.tsx     # Total price breakdown
-│   │   ├── MemberToggle.tsx     # Member discount toggle
-│   │   └── OrderCalculator.tsx  # Main container component
-│   ├── services/                # Business logic
-│   │   ├── PriceCalculator.ts   # Price calculation engine
-│   │   └── DiscountService.ts   # Discount logic
-│   ├── hooks/                   # Custom React hooks
-│   │   ├── usePriceCalculation.ts # Price state & calculations
-│   │   └── useOrderManagement.ts  # Order state & operations
-│   ├── models/                  # TypeScript types & enums
-│   │   └── MenuItem.ts          # Menu item enum (Red, Green, Blue, etc.)
-│   ├── constants/               # Static values
-│   │   └── MenuPrices.ts        # Price mapping by item
-│   ├── utils/                   # Utility functions
-│   │   └── formatters.ts        # Currency formatting
-│   ├── App.tsx                  # Root component
-│   └── main.tsx                 # Entry point
-├── tests/                       # Jest test suite
-│   ├── services/
-│   │   ├── PriceCalculator.test.ts (24 tests)
-│   │   └── DiscountService.test.ts
-│   └── ...
-├── index.html                   # HTML template
-├── vite.config.ts               # Vite configuration
-├── tsconfig.json                # TypeScript configuration
-├── jest.config.cjs              # Jest configuration
-└── package.json                 # Project dependencies
+├── apps/
+│   ├── web/                     # React + Vite web application
+│   │   ├── src/
+│   │   │   ├── components/      # React UI components
+│   │   │   ├── services/        # Web-specific services
+│   │   │   ├── hooks/           # Custom React hooks
+│   │   │   └── ...
+│   │   ├── tests/               # Jest test suite
+│   │   ├── public/              # Static assets & PWA icons
+│   │   └── package.json
+│   │
+│   └── mobile/                  # Expo React Native app
+│       ├── App.tsx              # Main mobile component
+│       ├── assets/              # Mobile assets & icons
+│       ├── app.json             # Expo configuration
+│       └── package.json
+│
+├── packages/
+│   └── shared/                  # Shared business logic
+│       └── src/
+│           ├── models/          # MenuItem enum
+│           ├── constants/       # MenuPrices
+│           ├── services/        # DiscountService, PriceCalculator
+│           └── index.ts         # Public exports
+│
+├── n8n/                         # n8n workflow definitions
+│   ├── order-analytics-workflow.json
+│   ├── get-orders-api.json
+│   └── order-ai-analysis-gemini-workflow.json
+│
+├── docker-compose.yml           # Docker services (n8n, mobile-dev)
+├── turbo.json                   # Turborepo configuration
+├── pnpm-workspace.yaml          # pnpm workspace config
+├── vercel.json                  # Vercel deployment config
+└── package.json                 # Root package.json
 ```
 
 ## 🧪 Test Coverage
@@ -211,31 +233,46 @@ Scenario 4: Orange (qty 2) + Member
 
 ## 🛠️ Technologies
 
-### Frontend
+### Monorepo & Build
+- **pnpm 7.33.7** - Fast, disk-efficient package manager
+- **Turborepo 2.x** - High-performance build system
+- **pnpm Workspaces** - Monorepo package management
+
+### Web App (apps/web)
 - **React 18.2.0** - UI library
 - **TypeScript 5.3.3** - Type safety
 - **Vite 4.5.0** - Fast build tool & dev server
+- **vite-plugin-pwa 0.17.4** - PWA support with service worker
+
+### Mobile App (apps/mobile)
+- **Expo SDK 54** - React Native framework
+- **React Native 0.77.1** - Cross-platform mobile
+- **React 18.3.1** - UI library
+
+### Shared Package (packages/shared)
+- **TypeScript** - Shared types and logic
+- **MenuItem enum** - Common data models
+- **PriceCalculator** - Core pricing logic
+- **DiscountService** - Discount calculations
 
 ### Testing
 - **Jest 29.7.0** - Test framework
 - **ts-jest 29.1.1** - TypeScript support for Jest
 - **React Testing Library 14.1.2** - Component testing
 - **@testing-library/jest-dom 6.1.5** - Custom Jest matchers
-- **@testing-library/user-event 13.5.0** - User interaction simulation
 
 ### UI Libraries
 - **SweetAlert2 11.26.20** - Beautiful alert modals
 - **CSS3** - Animations, gradients, glassmorphism
 
-### Build & Quality
-- **ESLint 8.56.0** - Code linting
-- **@typescript-eslint 6.16.0** - TypeScript ESLint rules
-- **TypeScript Compiler** - Static type checking
-
 ### Integration & Automation
 - **n8n** - Workflow automation platform
 - **Docker & Docker Compose** - Container orchestration
 - **Google Sheets API** - Order data storage
+
+### Deployment
+- **Vercel** - Web app hosting
+- **Docker** - Mobile development environment
 
 ## 🎨 Design System
 
@@ -253,19 +290,35 @@ Scenario 4: Orange (qty 2) + Member
 
 ## 🚢 Deployment
 
-### Build
+### Web App (Vercel)
+
+The project includes `vercel.json` for monorepo deployment:
+
 ```bash
-npm run build
+# Build web app
+pnpm build:web
 ```
 
-### Serve Locally
+Vercel configuration automatically:
+- Installs pnpm
+- Builds from root with `pnpm build:web`
+- Outputs from `apps/web/dist`
+
+### Mobile App (Expo)
+
 ```bash
-npm run preview
+# Start Expo with tunnel (via Docker)
+docker-compose up mobile-dev
+
+# Or with Node 20+ locally
+pnpm dev:mobile
 ```
+
+Scan QR code with Expo Go app on your device.
 
 ### Deploy to Static Host
-The `dist/` folder is production-ready and can be deployed to:
-- Vercel
+The `apps/web/dist/` folder is production-ready and can be deployed to:
+- Vercel (recommended - configured)
 - Netlify
 - GitHub Pages
 - AWS S3
@@ -274,17 +327,21 @@ The `dist/` folder is production-ready and can be deployed to:
 ## 📚 Learn More
 
 ### Key Concepts
-1. **Service Layer Pattern** - Business logic separate from UI
-2. **Custom Hooks** - Encapsulate state management logic
-3. **SOLID Principles** - Single responsibility, open/closed
-4. **Real-time Calculation** - useEffect triggers recalculation on dependency changes
-5. **Component Composition** - Reusable, single-purpose components
+1. **Monorepo Architecture** - Shared code between web and mobile apps
+2. **Service Layer Pattern** - Business logic separate from UI
+3. **Custom Hooks** - Encapsulate state management logic
+4. **SOLID Principles** - Single responsibility, open/closed
+5. **Real-time Calculation** - useEffect triggers recalculation on dependency changes
+6. **Component Composition** - Reusable, single-purpose components
+7. **PWA Support** - Installable web app with offline capabilities
 
 ### Files to Explore
-- `src/services/PriceCalculator.ts` - Core discount & pricing logic
-- `src/hooks/usePriceCalculation.ts` - Price state management
-- `src/components/OrderCalculator.tsx` - Main component orchestration
-- `tests/services/PriceCalculator.test.ts` - Test examples
+- `packages/shared/src/services/PriceCalculator.ts` - Core discount & pricing logic
+- `packages/shared/src/services/DiscountService.ts` - Discount rules
+- `apps/web/src/hooks/usePriceCalculation.ts` - Price state management
+- `apps/web/src/components/OrderCalculator.tsx` - Main component orchestration
+- `apps/web/tests/services/PriceCalculator.test.ts` - Test examples
+- `apps/mobile/App.tsx` - Mobile app entry point
 
 ## 🔗 N8n Integration
 
@@ -295,10 +352,13 @@ The `dist/` folder is production-ready and can be deployed to:
 
 ```bash
 # Start n8n container
-docker-compose up -d
+docker-compose up n8n -d
 
-# Import and activate workflows
+# Import and activate workflows (Windows)
 .\scripts\init-n8n-workflow.bat
+
+# Import and activate workflows (Linux/Mac)
+./scripts/init-n8n-workflow.sh
 ```
 
 ### Workflows
@@ -370,3 +430,46 @@ If auto-import fails:
 3. Configure Google Sheets credentials
 4. Activate both workflows
 
+## 📱 Mobile Development
+
+### Using Docker (Recommended for Node 16 users)
+
+The mobile app requires Node 20+. If you're using Node 16, use Docker:
+
+```bash
+# Start mobile dev server with tunnel
+docker-compose up mobile-dev
+
+# Follow logs
+docker-compose logs -f mobile-dev
+```
+
+This will:
+1. Start a Node 20 container
+2. Install dependencies with pnpm
+3. Start Expo with tunnel mode
+4. Display QR code for Expo Go app
+
+### Using Local Node 20+
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start mobile app
+pnpm dev:mobile
+```
+
+### Mobile App Features
+
+The mobile app shares business logic from `@order-calculator/shared`:
+- Same pricing calculations as web
+- Same discount rules
+- Consistent user experience
+
+### Expo Configuration
+
+- **SDK**: 54.0.0
+- **Platform**: iOS, Android, Web
+- **Icons**: Custom box design icons
+- **Splash**: Branded splash screen
