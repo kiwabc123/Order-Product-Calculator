@@ -5,6 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 .npm
 .pnpm-debug.log*
+.pnpm-store/
 
 # Build Output
 dist/
@@ -53,3 +54,39 @@ Thumbs.db
 
 # Production
 dist/
+
+# n8n Data (runtime files)
+n8n-data/*.sqlite
+n8n-data/*.sqlite-shm
+n8n-data/*.sqlite-wal
+n8n-data/crash.journal
+
+# Expo / React Native
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+apps/mobile/.expo/
+apps/mobile/node_modules/
+n8n-data/crash.journal
+n8n-data/.n8n/
+
+# pnpm
+.pnpm-store/
+
+# Expo / React Native
+apps/mobile/.expo/
+apps/mobile/node_modules/
+*.hprof
+.expo/
+expo-env.d.ts
+
+# Docker
+Dockerfile.mobile
+
+# Turbo
+.turbo/

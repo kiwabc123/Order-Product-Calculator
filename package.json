@@ -10,7 +10,10 @@
     "type-check": "turbo run type-check",
     "dev:web": "pnpm --filter @order-calculator/web dev",
     "build:web": "pnpm --filter @order-calculator/web build",
-    "test:web": "pnpm --filter @order-calculator/web test"
+    "test:web": "pnpm --filter @order-calculator/web test",
+    "dev:mobile": "pnpm --filter @order-calculator/mobile start",
+    "mobile:android": "pnpm --filter @order-calculator/mobile android",
+    "mobile:ios": "pnpm --filter @order-calculator/mobile ios"
   },
   "devDependencies": {
     "turbo": "^2.0.0"
